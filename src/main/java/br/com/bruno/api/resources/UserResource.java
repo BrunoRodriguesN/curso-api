@@ -1,6 +1,7 @@
 package br.com.bruno.api.resources;
 
 
+import br.com.bruno.api.domain.User;
 import br.com.bruno.api.domain.dto.UserDTO;
 import br.com.bruno.api.services.UserService;
 import org.modelmapper.ModelMapper;
@@ -39,6 +40,12 @@ public class UserResource {
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}").buildAndExpand(service.create(obj).getId()).toUri();
         return ResponseEntity.created(uri).build();
+    }
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<UserDTO> update(@PathVariable Integer id, @RequestBody UserDTO obj) {
+        obj.setId(id);
+        User newObj = service.update(obj);
+        return ResponseEntity.ok().body(mapper.map(newObj, UserDTO.class));
 
     }
 
