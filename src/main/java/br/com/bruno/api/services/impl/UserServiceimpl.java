@@ -1,9 +1,11 @@
 package br.com.bruno.api.services.impl;
 
 import br.com.bruno.api.domain.User;
+import br.com.bruno.api.domain.dto.UserDTO;
 import br.com.bruno.api.repositories.UserRepository;
 import br.com.bruno.api.services.UserService;
 import br.com.bruno.api.services.exceptions.ObjectNotFoundException;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,9 @@ public class UserServiceimpl implements UserService {
     @Autowired
     private UserRepository repository;
 
+    @Autowired
+    private ModelMapper mapper;
+
     @Override
     public User findById(Integer id) {
         Optional<User> obj = repository.findById(id);
@@ -26,5 +31,11 @@ public class UserServiceimpl implements UserService {
     public List<User> findAll() {
         return repository.findAll();
 
+    }
+
+    @Override
+    public User create(UserDTO obj) {
+
+        return repository.save(mapper.map(obj, User.class));
     }
 }
