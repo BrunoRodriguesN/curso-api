@@ -3,6 +3,7 @@ package br.com.bruno.api.services.impl;
 import br.com.bruno.api.domain.User;
 import br.com.bruno.api.domain.dto.UserDTO;
 import br.com.bruno.api.repositories.UserRepository;
+import br.com.bruno.api.services.exceptions.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -57,6 +58,19 @@ class UserServiceimplTest {
         assertEquals(ID, response.getId());
         assertEquals(NAME, response.getName());
         assertEquals(EMAIL, response.getEmail());
+    }
+
+    @Test
+    void whenFindByIdThenReturnAndObjectNotFoundException(){
+        when(repository.findById(anyInt())).thenThrow(new ObjectNotFoundException("Objeto não encontrado !"));
+
+        try {
+            service.findById(ID);
+
+        }catch (Exception ex) {
+            assertEquals(ObjectNotFoundException.class, ex.getClass());
+            assertEquals("Objeto não encontrado !", ex.getMessage());
+        }
     }
 
     @Test
